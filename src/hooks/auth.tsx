@@ -3,6 +3,13 @@ import React, { createContext, useCallback, useState, useContext, useEffect } fr
 import AsyncStorage from "@react-native-community/async-storage";
 import api from '../services/api'
 
+interface User {
+  id: string
+  name: string
+  email: string
+  avatar_url: string
+}
+
 interface SignInCredetials {
   email: string
   password: string
@@ -10,13 +17,13 @@ interface SignInCredetials {
 
 interface AuthData {
   token: string
-  user: object
+  user: User
 }
 
 interface AuthContextData {
-  user: object
-  loading: boolean
+  user: User
   signIn(credentials: SignInCredetials): Promise<void>
+  updateUser(user: User): void
   signOut(): void
 }
 
@@ -46,6 +53,7 @@ const AuthProvider: React.FC = ({ children }) => {
         ])
 
         if(token && user) {
+          api.defaults.headers.common.Authorization = `Bearer ${token}`
           setAuthData({ token, user: JSON.parse(user) })
         }
 
@@ -68,6 +76,15 @@ const AuthProvider: React.FC = ({ children }) => {
 
     setAuthData(data)
   }, [])
+
+  const updateUser = useCallback(async (user: User) => {
+    await AsyncStorage.multiSet([
+      ['@Gobarber:user', JSON.stringify(user)]
+    ])
+
+    setAuthData(data => ({ token: data.token, user }))
+  }, [])
+
 
   const signOut = useCallback(async () => {
     await AsyncStorage.multiRemove(['@Gobarber:token', '@Gobarber:user'])
