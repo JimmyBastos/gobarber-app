@@ -69,6 +69,8 @@ const AuthProvider: React.FC = ({ children }) => {
       password
     })
 
+    api.defaults.headers.common.Authorization = `Bearer ${data.token}`
+
     await AsyncStorage.multiSet([
       ['@Gobarber:token', data.token],
       ['@Gobarber:user', JSON.stringify(data.user)]
