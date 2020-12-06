@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-import { useAuth } from "../../hooks/auth";
+import { useAuth } from '../../hooks/auth'
 
-import api from '../../services/api';
+import api from '../../services/api'
 
 import {
   Container,
@@ -20,7 +20,7 @@ import {
   ProviderName,
   ProviderMeta,
   ProviderMetaText
- } from "./styles";
+} from './styles'
 
 import Icon from 'react-native-vector-icons/Feather'
 
@@ -31,7 +31,7 @@ export interface Provider {
 }
 
 const Dashboard: React.FC = () => {
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
   const { navigate } = useNavigation()
 
   const [providers, setProviders] = useState<Provider[]>([])
@@ -39,28 +39,21 @@ const Dashboard: React.FC = () => {
   useEffect(
     function loadProviders () {
       api.get<Provider[]>('/providers').then(
-        ({data: providers}) => {
+        ({ data: providers }) => {
           setProviders(providers)
         }
       )
     }, []
   )
 
-  const goToProfile = useCallback(
-    () => {
-      navigate("Profile")
-    },
-    [navigate]
-  )
+  const goToProfile = useCallback(() => navigate('Profile'), [navigate])
 
   const goToCreateAppointment = useCallback(
     (providerId: string) => {
-      navigate("CreateAppointment", { providerId })
+      navigate('CreateAppointment', { providerId })
     },
     [navigate]
   )
-
-
 
   return (
     <Container>
@@ -73,7 +66,7 @@ const Dashboard: React.FC = () => {
         </HeaderTitle>
 
         <ProfileButton onPress={goToProfile}>
-          <UserAvatar source={{uri: user.avatar_url}} />
+          <UserAvatar source={{ uri: user.avatar_url }} />
         </ProfileButton>
       </Header>
 
@@ -90,7 +83,7 @@ const Dashboard: React.FC = () => {
             <ProviderContainer
               onPress={() => goToCreateAppointment(provider.id)}
             >
-              <ProviderAvatar source={{uri: provider.avatar_url}} />
+              <ProviderAvatar source={{ uri: provider.avatar_url }} />
 
               <ProviderInfo>
                 <ProviderName>
@@ -108,7 +101,7 @@ const Dashboard: React.FC = () => {
                   </ProviderMetaText>
                 </ProviderMeta>
 
-                 <ProviderMeta>
+                <ProviderMeta>
                   <Icon
                     name="clock"
                     size={14}
@@ -122,12 +115,9 @@ const Dashboard: React.FC = () => {
             </ProviderContainer>
           )
         }
-      >
-
-      </ProvidersList>
+      />
     </Container>
   )
 }
-
 
 export default Dashboard

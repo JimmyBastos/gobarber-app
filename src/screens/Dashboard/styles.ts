@@ -1,14 +1,15 @@
-import { FlatList, RectButton, TouchableOpacity } from 'react-native-gesture-handler'
+import { FlatList, RectButton } from 'react-native-gesture-handler'
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 import styled from 'styled-components/native'
-import { Provider } from './index'
+import { Provider } from '.'
 
 export const Container = styled.View`
   flex: 1;
 `
 
 export const Header = styled.View`
-  padding: ${getStatusBarHeight() + 24}px;
+  padding: 24px;
+  padding-top: ${getStatusBarHeight() + 24}px;
   background-color: #28262e;
 
   flex-direction: row;
@@ -23,7 +24,7 @@ export const HeaderTitle = styled.Text`
   line-height: 28px;
 `
 
-export const UserName  = styled.Text`
+export const UserName = styled.Text`
   width: 100%;
   color: #ff9001;
   font-family: 'RobotoSlab-Medium';
