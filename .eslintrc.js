@@ -3,11 +3,7 @@ module.exports = {
   env: {
     es6: true
   },
-  extends: [
-    '@react-native-community',
-    'plugin:react/recommended',
-    'standard'
-  ],
+  extends: ['@react-native-community', 'plugin:react/recommended', 'standard'],
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly'
@@ -20,11 +16,12 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module'
   },
-  plugins: [
-    'react',
-    '@typescript-eslint'
-  ],
+  plugins: ['react', '@typescript-eslint'],
   rules: {
+    'prettier/prettier': 0,
+
+    camelcase: 0,
+
     'react/prop-types': 'off',
 
     // fix false positive on types

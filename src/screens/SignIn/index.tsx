@@ -26,8 +26,7 @@ import {
   ScrollView,
   TextInput,
   Alert
-} from "react-native"
-
+} from 'react-native'
 
 import {
   Container,
@@ -69,7 +68,6 @@ const SignIn: React.FC = () => {
         email: formData.email,
         password: formData.password
       })
-
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         formRef.current?.setErrors(
@@ -89,7 +87,7 @@ const SignIn: React.FC = () => {
   return (
     <>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         enabled
       >
@@ -161,6 +159,5 @@ const SignIn: React.FC = () => {
     </>
   )
 }
-
 
 export default SignIn

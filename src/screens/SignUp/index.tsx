@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react'
 
 import { useNavigation } from '@react-navigation/native'
 
-import * as Yup from "yup";
+import * as Yup from 'yup'
 
 import { Form } from '@unform/mobile'
 import { FormHandles } from '@unform/core'
@@ -18,7 +18,6 @@ import getValidationErrors from '../../utils/getValidationErrors'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
 
-
 import {
   View,
   Image,
@@ -27,7 +26,7 @@ import {
   ScrollView,
   TextInput,
   Alert
-} from "react-native"
+} from 'react-native'
 
 import {
   Container,
@@ -47,7 +46,7 @@ const SignUp: React.FC = () => {
   const passwordInputRef = useRef<TextInput>(null)
   const emailInputRef = useRef<TextInput>(null)
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const handleSignUp = useCallback(async (formData: SignUpFormData) => {
     try {
@@ -73,7 +72,6 @@ const SignUp: React.FC = () => {
         'Cadastro realizado com sucesso!',
         'Você já pode fazer login.'
       )
-
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         formRef.current?.setErrors(
@@ -90,11 +88,10 @@ const SignUp: React.FC = () => {
     }
   }, [navigation])
 
-
   return (
     <>
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         enabled
       >
@@ -172,6 +169,5 @@ const SignUp: React.FC = () => {
     </>
   )
 }
-
 
 export default SignUp
