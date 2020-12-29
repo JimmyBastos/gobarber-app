@@ -11,14 +11,12 @@ import {
 } from './styles'
 
 import Icon from 'react-native-vector-icons/Feather'
-import { useAuth } from '../../hooks/auth'
 
 interface RouteParams {
   time: number
 }
 
 const AppointmentCreated: React.FC = () => {
-  const { user } = useAuth()
   const route = useRoute()
   const { reset } = useNavigation()
 

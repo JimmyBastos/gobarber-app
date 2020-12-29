@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useState, useContext, useEffect } from 'react'
 
-import AsyncStorage from "@react-native-community/async-storage";
+import AsyncStorage from '@react-native-community/async-storage'
 import api from '../services/api'
 
 interface User {
@@ -22,6 +22,7 @@ interface AuthData {
 
 interface AuthContextData {
   user: User
+  loading: boolean
   signIn(credentials: SignInCredetials): Promise<void>
   updateUser(user: User): void
   signOut(): void
@@ -46,21 +47,21 @@ const AuthProvider: React.FC = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-      async function loadStoragedData(): Promise<void> {
-        const [[, token], [, user]] = await AsyncStorage.multiGet([
-          '@Gobarber:token',
-          '@Gobarber:user'
-        ])
+    async function loadStoragedData (): Promise<void> {
+      const [[, token], [, user]] = await AsyncStorage.multiGet([
+        '@Gobarber:token',
+        '@Gobarber:user'
+      ])
 
-        if(token && user) {
-          api.defaults.headers.common.Authorization = `Bearer ${token}`
-          setAuthData({ token, user: JSON.parse(user) })
-        }
-
-        setLoading(false)
+      if (token && user) {
+        api.defaults.headers.common.Authorization = `Bearer ${token}`
+        setAuthData({ token, user: JSON.parse(user) })
       }
 
-      loadStoragedData()
+      setLoading(false)
+    }
+
+    loadStoragedData()
   }, [])
 
   const signIn = useCallback(async ({ email, password }) => {
@@ -87,14 +88,27 @@ const AuthProvider: React.FC = ({ children }) => {
     setAuthData(data => ({ token: data.token, user }))
   }, [])
 
-
   const signOut = useCallback(async () => {
     await AsyncStorage.multiRemove(['@Gobarber:token', '@Gobarber:user'])
     setAuthData({} as AuthData)
   }, [])
 
+  useEffect(function onTokenExpires () {
+    api.interceptors.response.use(
+      (success) => success,
+      (error) => {
+        // if (error.response.status === 401) {
+        //   // TODO: try to refresh the token before logout
+        //   signOut()
+        // }
+
+        return Promise.reject(error)
+      }
+    )
+  }, [signOut])
+
   return (
-    <AuthContext.Provider value={{ user: authData.user, loading, signIn, signOut }}>
+    <AuthContext.Provider value={{ user: authData.user, loading, updateUser, signIn, signOut }}>
       { children }
     </AuthContext.Provider>
   )

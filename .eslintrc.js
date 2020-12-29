@@ -20,6 +20,8 @@ module.exports = {
   rules: {
     'prettier/prettier': 0,
 
+    'react-native/no-inline-styles': 0,
+
     camelcase: 0,
 
     'react/prop-types': 'off',

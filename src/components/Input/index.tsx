@@ -15,6 +15,7 @@ import { useField } from '@unform/core'
 interface InputProps extends TextInputProps {
   name: string
   icon: string
+  containerStyle?: object
 }
 
 interface InputValueReference {
@@ -25,7 +26,7 @@ interface InputRef {
   focus(): void
 }
 
-const Input: React.RefForwardingComponent<InputRef, InputProps> = ({ children, name, icon, ...props}, ref) => {
+const Input: React.ForwardRefRenderFunction<InputRef, InputProps> = ({ children, containerStyle, name, icon, ...props }, ref) => {
   const {
     defaultValue = '',
     registerField,
@@ -37,7 +38,7 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = ({ children, n
   const [isFilled, setIsFilled] = useState(false)
 
   const inputElementRef = useRef<any>(null)
-  const inputValueRef = useRef<InputValueReference>({ value: defaultValue})
+  const inputValueRef = useRef<InputValueReference>({ value: defaultValue })
 
   const handleInputFocus = useCallback(() => {
     setIsFocused(true)
@@ -48,9 +49,8 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = ({ children, n
     setIsFilled(!!inputValueRef.current.value)
   }, [setIsFocused])
 
-
   useImperativeHandle(ref, () => ({
-    focus() {
+    focus () {
       inputElementRef.current.focus()
     }
   }))
@@ -60,14 +60,14 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = ({ children, n
       name: fieldName,
       ref: inputValueRef.current,
       path: 'value',
-      setValue(ref: any, value) {
-        inputValueRef.current.value = value;
+      setValue (ref: any, value) {
+        inputValueRef.current.value = value
         inputElementRef.current.setNativeProps({
           text: value
         })
       },
-      clearValue() {
-        inputValueRef.current.value = '';
+      clearValue () {
+        inputValueRef.current.value = ''
         inputElementRef.current.clar()
       }
     })
@@ -75,13 +75,14 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = ({ children, n
 
   return (
     <Container
+      style={containerStyle}
       isFocused={isFocused}
       hasError={!!error}
     >
       <Icon
         name={icon}
         size={20}
-        color={isFocused || isFilled ? "#ff9000" : "#666360" }
+        color={isFocused || isFilled ? '#ff9000' : '#666360' }
       />
       <TextInput
         ref={inputElementRef}
@@ -97,6 +98,5 @@ const Input: React.RefForwardingComponent<InputRef, InputProps> = ({ children, n
     </Container>
   )
 }
-
 
 export default forwardRef(Input)
